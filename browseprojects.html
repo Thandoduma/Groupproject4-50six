@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Projects - 450Six</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8fafc;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1DD1A1 0%, #00D4AA 100%);
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 20px rgba(29, 209, 161, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-link:hover {
+            opacity: 0.8;
+        }
+
+        .btn {
+            padding: 10px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: #1DD1A1;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #1DD1A1 0%, #00D4AA 100%);
+            color: white;
+            padding: 80px 0 60px;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 40px;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 18px 60px 18px 25px;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 8px;
+            background: #1DD1A1;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .filters-section {
+            background: white;
+            padding: 30px 0;
+            border-bottom: 1px solid #e5e7eb;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .filters-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .filter-tab {
+            padding: 12px 25px;
+            background: #f3f4f6;
+            color: #6b7280;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .filter-tab.active, .filter-tab:hover {
+            background: #1DD1A1;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .sort-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .sort-select {
+            padding: 10px 15px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+        }
+
+        .view-toggle {
+            display: flex;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .view-btn {
+            padding: 8px 12px;
+            background: white;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: #1DD1A1;
+            color: white;
+        }
+
+        .projects-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .results-count {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .project-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1DD1A1, #00D4AA);
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .project-status {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1DD1A1;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-content {
+            padding: 25px;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .creator-avatar {
+            width: 40px;
+            height: 40px;
+            background: #1DD1A1;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+
+        .creator-info h4 {
+            font-size: 0.9rem;
+            color: #1f2937;
+            margin-bottom: 2px;
+        }
+
+        .creator-info p {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 10px;
+        }
+
+        .project-description {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tag {
+            background: #f0fdf4;
+            color: #16a34a;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #f3f4f6;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #1DD1A1;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #f3f4f6;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #1DD1A1, #00D4AA);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .load-more {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .btn-load-more {
+            background: white;
+            color: #1DD1A1;
+            border: 2px solid #1DD1A1;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+        }
+
+        .btn-load-more:hover {
+            background: #1DD1A1;
+            color: white;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1DD1A1 0%, #00D4AA 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-top: 60px;
+        }
+
+        .cta-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .btn-cta {
+            background: white;
+            color: #1DD1A1;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            margin: 0 10px;
+        }
+
+        .btn-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .mobile-filters {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-tabs {
+                display: none;
+            }
+
+            .mobile-filters {
+                display: block;
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .mobile-filter-btn {
+                background: #1DD1A1;
+                color: white;
+                border: none;
+                padding: 12px 25px;
+                border-radius: 10px;
+                font-weight: 600;
+                cursor: pointer;
+            }
+
+            .sort-controls {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: #6b7280;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #374151;
+        }
+
+        .featured-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #fbbf24;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Header -->
+    <header class="header">
+        <div class="nav-container">
+            <div class="logo">450SIX</div>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link">About</a>
+                <a href="#" class="nav-link">For Employers</a>
+                <a href="onboarding.html" class="btn btn-outline">Join Now</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Discover Amazing Graduate Projects</h1>
+            <p class="hero-subtitle">Explore innovative projects from talented South African graduates across all industries and disciplines</p>
+            
+            <div class="search-bar">
+                <input type="text" class="search-input" placeholder="Search projects, skills, or creators..." id="searchInput">
+                <button class="search-btn" id="searchBtn">Search</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters Section -->
+    <section class="filters-section">
+        <div class="filters-container">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-category="all">All Projects</button>
+                <button class="filter-tab" data-category="web-dev">Web Development</button>
+                <button class="filter-tab" data-category="mobile">Mobile Apps</button>
+                <button class="filter-tab" data-category="ai-ml">AI & Machine Learning</button>
+                <button class="filter-tab" data-category="design">Design</button>
+                <button class="filter-tab" data-category="business">Business</button>
+                <button class="filter-tab" data-category="engineering">Engineering</button>
+                <button class="filter-tab" data-category="research">Research</button>
+            </div>
+
+            <div class="mobile-filters">
+                <button class="mobile-filter-btn" id="mobileFilterBtn">Filter & Sort</button>
+            </div>
+
+            <div class="sort-controls">
+                <select class="sort-select" id="sortSelect">
+                    <option value="recent">Most Recent</option>
+                    <option value="popular">Most Popular</option>
+                    <option value="progress">Highest Progress</option>
+                    <option value="alphabetical">Alphabetical</option>
+                </select>
+                
+                <div class="view-toggle">
+                    <button class="view-btn active" data-view="grid">Grid</button>
+                    <button class="view-btn" data-view="list">List</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section class="projects-section">
+        <div class="section-header">
+            <h2>Featured Projects</h2>
+            <div class="results-count" id="resultsCount">Showing 12 of 156 projects</div>
+        </div>
+
+        <div class="projects-grid" id="projectsGrid">
+            <!-- Projects will be populated by JavaScript -->
+        </div>
+
+        <div class="load-more">
+            <button class="btn btn-load-more" id="loadMoreBtn">Load More Projects</button>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta-section">
+        <div class="cta-content">
+            <h2 class="cta-title">Ready to Showcase Your Work?</h2>
+            <p class="cta-subtitle">Join thousands of graduates who are building their careers through meaningful projects and professional connections.</p>
+            <a href="onboarding.html" class="btn btn-cta">Join as Graduate</a>
+            <a href="onboarding.html" class="btn btn-cta">Hire Talent</a>
+        </div>
+    </section>
+
+    <script>
+        // Sample project data
+        const projectsData = [
+            {
+                id: 1,
+                title: "E-Commerce Mobile App",
+                description: "Full-stack mobile application with React Native and Node.js backend, featuring user authentication, payment integration, and real-time notifications.",
+                creator: "Thabo Molefe",
+                university: "University of Witwatersrand",
+                degree: "Computer Science",
+                avatar: "TM",
+                category: "mobile",
+                tags: ["React Native", "Node.js", "MongoDB", "Stripe"],
+                progress: 85,
+                likes: 24,
+                views: 156,
+                duration: "4 months",
+                status: "85% Complete",
+                featured: true,
+                icon: "📱"
+            },
+            {
+                id: 2,
+                title: "AI-Powered Healthcare Assistant",
+                description: "Machine learning model that helps diagnose common medical conditions using symptom analysis and medical image recognition.",
+                creator: "Nomsa Dlamini",
+                university: "University of Cape Town",
+                degree: "Data Science",
+                avatar: "ND",
+                category: "ai-ml",
+                tags: ["Python", "TensorFlow", "OpenCV", "Flask"],
+                progress: 92,
+                likes: 38,
+                views: 243,
+                duration: "6 months",
+                status: "92% Complete",
+                featured: true,
+                icon: "🏥"
+            },
+            {
+                id: 3,
+                title: "Sustainable Energy Dashboard",
+                description: "Interactive web dashboard tracking renewable energy usage and carbon footprint reduction for residential and commercial properties.",
+                creator: "Sipho Khumalo",
+                university: "Stellenbosch University",
+                degree: "Electrical Engineering",
+                avatar: "SK",
+                category: "engineering",
+                tags: ["React", "D3.js", "Python", "IoT"],
+                progress: 78,
+                likes: 19,
+                views: 98,
+                duration: "3 months",
+                status: "78% Complete",
+                featured: false,
+                icon: "⚡"
+            },
+            {
+                id: 4,
+                title: "Digital Banking UX Redesign",
+                description: "Complete user experience redesign for a major South African bank's mobile app, focusing on accessibility and user journey optimization.",
+                creator: "Lerato Makena",
+                university: "University of Johannesburg",
+                degree: "Industrial Design",
+                avatar: "LM",
+                category: "design",
+                tags: ["Figma", "User Research", "Prototyping", "UI/UX"],
+                progress: 100,
+                likes: 42,
+                views: 312,
+                duration: "5 months",
+                status: "Completed",
+                featured: true,
+                icon: "🎨"
+            },
+            {
+                id: 5,
+                title: "Smart Agriculture Platform",
+                description: "IoT-based platform helping smallholder farmers optimize crop yields using sensor data, weather predictions, and machine learning insights.",
+                creator: "Mandla Zulu",
+                university: "University of KwaZulu-Natal",
+                degree: "Agricultural Engineering",
+                avatar: "MZ",
+                category: "engineering",
+                tags: ["IoT", "Python", "Arduino", "Machine Learning"],
+                progress: 65,
+                likes: 16,
+                views: 87,
+                duration: "4 months",
+                status: "65% Complete",
+                featured: false,
+                icon: "🌱"
+            },
+            {
+                id: 6,
+                title: "Fintech Startup Business Plan",
+                description: "Comprehensive business plan and market analysis for a peer-to-peer lending platform targeting underbanked communities in South Africa.",
+                creator: "Naledi Mokoena",
+                university: "University of Pretoria",
+                degree: "Business Administration",
+                avatar: "NM",
+                category: "business",
+                tags: ["Business Strategy", "Market Research", "Financial Modeling", "Fintech"],
+                progress: 88,
+                likes: 21,
+                views: 134,
+                duration: "3 months",
+                status: "88% Complete",
+                featured: false,
+                icon: "💼"
+            },
+            {
+                id: 7,
+                title: "Educational VR Experience",
+                description: "Virtual reality application teaching South African history through immersive experiences and interactive storytelling.",
+                creator: "Kagiso Tladi",
+                university: "Rhodes University",
+                degree: "Computer Science",
+                avatar: "KT",
+                category: "web-dev",
+                tags: ["Unity", "C#", "VR Development", "3D Modeling"],
+                progress: 73,
+                likes: 29,
+                views: 178,
+                duration: "5 months",
+                status: "73% Complete",
+                featured: false,
+                icon: "🥽"
+            },
+            {
+                id: 8,
+                title: "Climate Change Research Study",
+                description: "Comprehensive study on the impact of climate change on South African coastal ecosystems, with predictive modeling and conservation recommendations.",
+                creator: "Dr. Sarah Johnson",
+                university: "University of Cape Town",
+                degree: "Environmental Science PhD",
+                avatar: "SJ",
+                category: "research",
+                tags: ["Research", "Climate Science", "Data Analysis", "Conservation"],
+                progress: 95,
+                likes: 33,
+                views: 201,
+                duration: "12 months",
+                status: "95% Complete",
+                featured: true,
+                icon: "🌍"
+            }
+        ];
+
+        let currentProjects = [...projectsData];
+        let currentCategory = 'all';
+        let currentSort = 'recent';
+        let projectsPerPage = 8;
+        let currentPage = 1;
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            renderProjects();
+            initializeEventListeners();
+        });
+
+        function initializeEventListeners() {
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    currentCategory = this.dataset.category;
+                    filterAndSort();
+                });
+            });
+
+            // Sort select
+            document.getElementById('sortSelect').addEventListener('change', function() {
+                currentSort = this.value;
+                filterAndSort();
+            });
+
+            // Search
+            document.getElementById('searchBtn').addEventListener('click', handleSearch);
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') handleSearch();
+            });
+
+            // Load more
+            document.getElementById('loadMoreBtn').addEventListener('click', loadMoreProjects);
+
+            // View toggle
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    // View toggle functionality can be added here
+                });
+            });
+        }
+
+        function filterAndSort() {
+            let filteredProjects = [...projectsData];
+
+            // Filter by category
+            if (currentCategory !== 'all') {
+                filteredProjects = filteredProjects.filter(project => project.category === currentCategory);
+            }
+
+            // Sort projects
+            switch (currentSort) {
+                case 'popular':
+                    filteredProjects.sort((a, b) => (b.likes + b.views) - (a.likes + a.views));
+                    break;
+                case 'progress':
+                    filteredProjects.sort((a, b) => b.progress - a.progress);
+                    break;
+                case 'alphabetical':
+                    filteredProjects.sort((a, b) => a.title.localeCompare(b.title));
+                    break;
+                default: // recent
+                    filteredProjects.sort((a, b) => b.id - a.id);
+            }
+
+            currentProjects = filteredProjects;
+            currentPage = 1;
+            renderProjects();
+        }
+
+        function handleSearch() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            
+            if (!searchTerm) {
+                currentProjects = [...projectsData];
+            } else {
+                currentProjects = projectsData.filter(project => 
+                    project.title.toLowerCase().includes(searchTerm) ||
+                    project.description.toLowerCase().includes(searchTerm) ||
+                    project.creator.toLowerCase().includes(searchTerm) ||
+                    project.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+                );
+            }
+            
+            currentPage = 1;
+            renderProjects();
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projectsGrid');
+            const startIndex = 0;
+            const endIndex = currentPage * projectsPerPage;
+            const projectsToShow = currentProjects.slice(startIndex, endIndex);
+
+            grid.innerHTML = '';
+
+            if (projectsToShow.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">🔍</div>
+                        <h3 class="empty-title">No projects found</h3>
+                        <p>Try adjusting your filters or search terms</p>
+                    </div>
+                `;
+                document.getElementById('loadMoreBtn').style.display = 'none';
+            } else {
+                projectsToShow.forEach(project => {
+                    const projectCard = createProjectCard(project);
+                    grid.appendChild(projectCard);
+                });
+
+                // Show/hide load more button
+                const loadMoreBtn = document.getElementById('loadMoreBtn');
+                if (endIndex >= currentProjects.length) {
+                    loadMoreBtn.style.display = 'none';
+                } else {
+                    loadMoreBtn.style.display = 'inline-block';
+                }
+            }
+
+            // Update results count
+            const resultsCount = document.getElementById('resultsCount');
+            const showing = Math.min(endIndex, currentProjects.length);
+            resultsCount.textContent = `Showing ${showing} of ${currentProjects.length} projects`;
+        }
+
+        function createProjectCard(project) {
+            const card = document.createElement('div');
+            card.className = 'project-card';
+            card.onclick = () => openProjectDetails(project.id);
+
+            card.innerHTML = `
+                <div class="project-image">
+                    ${project.featured ? '<div class="featured-badge">Featured</div>' : ''}
+                    <div class="project-status">${project.status}</div>
+                    <div>${project.icon}</div>
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <div class="creator-avatar">${project.avatar}</div>
+                        <div class="creator-info">
+                            <h4>${project.creator}</h4>
+                            <p>${project.degree}</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="project-title">${project.title}</h3>
+                    <p class="project-description">${project.description}</p>
+                    
+                    <div class="project-tags">
+                        ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
+                    </div>
+                    
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${project.progress}%"></div>
+                    </div>
+                    
+                    <div class="project-stats">
+                        <div class="stat-item">
+                            <div class="stat-value">${project.progress}%</div>
+                            <div class="stat-label">Complete</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${project.likes}</div>
+                            <div class="stat-label">Likes</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${project.views}</div>
+                            <div class="stat-label">Views</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-value">${project.duration}</div>
+                            <div class="stat-label">Duration</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function loadMoreProjects() {
+            currentPage++;
+            renderProjects();
+        }
+
+        function openProjectDetails(projectId) {
+            // For now, just show an alert. Later this will navigate to project detail page
+            const project = projectsData.find(p => p.id === projectId);
+            alert(`Opening project: ${project.title}\n\nThis will navigate to the detailed project view in the full implementation.`);
+            
+            // In the full implementation, this would navigate to a project details page:
+            // window.location.href = `project-details.html?id=${projectId}`;
+        }
+    </script>
+</body>
+</html>
