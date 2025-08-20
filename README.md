@@ -14,6 +14,8 @@ Graduate profile creation
 
 Job listings & application flow
 
+projects and portfolio hub
+
 Lessons Learned :
 
 Importance of teamwork & clear communication
